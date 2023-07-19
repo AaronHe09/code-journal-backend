@@ -1,18 +1,3 @@
-let data = {
-  entries: [],
-  nextEntryId: 1,
-};
-
-window.addEventListener('beforeunload', function (event) {
-  const dataJSON = JSON.stringify(data);
-  localStorage.setItem('code-journal-data', dataJSON);
-});
-
-const localData = JSON.parse(localStorage.getItem('code-journal-data'));
-if (localData) {
-  data = localData;
-}
-
 export async function readEntries() {
   const res = await fetch('/api/entries');
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);

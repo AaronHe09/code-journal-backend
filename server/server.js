@@ -2,8 +2,8 @@
 import 'dotenv/config';
 import pg from 'pg';
 import express from 'express';
-import ClientError from '../client/src/ClientError';
-import errorMiddleware from '../client/src/error-middleware';
+import errorMiddleware from './lib/error-middleware.js';
+import ClientError from './lib/client-error.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,

@@ -1,7 +1,23 @@
 import { readEntries } from './data';
+import { useEffect, useState } from 'react';
 
 export default function EntryList({ onCreate, onEdit }) {
-  const entries = readEntries();
+  const [entries, setEntries] = useState();
+  const [error, setError] = useState();
+  useEffect(() => {
+    async function fetchEntries() {
+      try {
+        const data = await readEntries();
+        setEntries(data);
+      } catch (err) {
+        setError(err);
+      }
+    }
+    if (!entries) {
+      fetchEntries();
+    }
+  }, [entries]);
+
   return (
     <div className="container">
       <div className="row">
@@ -20,9 +36,11 @@ export default function EntryList({ onCreate, onEdit }) {
       <div className="row">
         <div className="column-full">
           <ul className="entry-ul">
-            {entries.map((entry) => (
-              <Entry key={entry.entryId} entry={entry} onEdit={onEdit} />
-            ))}
+            {entries &&
+              entries.map((entry) => (
+                <Entry key={entry.entryId} entry={entry} onEdit={onEdit} />
+              ))}
+            {error && error.message}
           </ul>
         </div>
       </div>

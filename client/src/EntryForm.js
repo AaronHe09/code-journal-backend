@@ -11,12 +11,19 @@ export default function EntryForm({ entry, onSubmit }) {
   const [photoUrl, setPhotoUrl] = useState(entry?.photoUrl ?? '');
   const [notes, setNotes] = useState(entry?.notes ?? '');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState();
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const newEntry = { title, photoUrl, notes };
     if (entry) {
-      updateEntry({ ...entry, ...newEntry });
+      async function updatedEntry() {
+        try {
+          const data = await updateEntry(entry);
+        } catch (err) {
+          setError(error);
+        }
+      }
     } else {
       addEntry(newEntry);
     }
