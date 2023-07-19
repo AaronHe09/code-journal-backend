@@ -17,21 +17,27 @@ export default function EntryForm({ entry, onSubmit }) {
     event.preventDefault();
     const newEntry = { title, photoUrl, notes };
     if (entry) {
-      async function updatedEntry() {
-        try {
-          const data = await updateEntry(entry);
-        } catch (err) {
-          setError(error);
-        }
+      try {
+        await updateEntry({ ...entry, ...newEntry });
+      } catch (err) {
+        setError(err);
       }
     } else {
-      addEntry(newEntry);
+      try {
+        await addEntry(newEntry);
+      } catch (err) {
+        setError(err);
+      }
     }
     onSubmit();
   }
 
-  function handleDelete() {
-    removeEntry(entry.entryId);
+  async function handleDelete() {
+    try {
+      await removeEntry(entry.entryId);
+    } catch (err) {
+      setError(err);
+    }
     onSubmit();
   }
 

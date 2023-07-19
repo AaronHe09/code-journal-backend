@@ -29,8 +29,6 @@ export async function updateEntry(entry) {
 export async function removeEntry(entryId) {
   const req = {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(entryId),
   };
   const res = await fetch(`/api/entries/${entryId}`, req);
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);

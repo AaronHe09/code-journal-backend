@@ -13,6 +13,7 @@ const db = new pg.Pool({
 });
 
 const app = express();
+app.use(express.json());
 
 app.get('/api/entries', async (req, res, next) => {
   try {
@@ -49,6 +50,7 @@ app.post('/api/entries', async (req, res, next) => {
 });
 
 app.patch('/api/entries/:entryId', async (req, res, next) => {
+  console.log(req.body);
   try {
     const entryId = Number(req.params.entryId);
     if (!Number.isInteger(entryId) || entryId < 1) {
@@ -60,7 +62,7 @@ app.patch('/api/entries/:entryId', async (req, res, next) => {
     }
     const sql = `
       update "entries"
-        set "updatedAt" = now(),
+        set
             "title" = $1,
             "notes" = $2,
             "photoUrl" = $3
@@ -79,7 +81,7 @@ app.patch('/api/entries/:entryId', async (req, res, next) => {
   }
 });
 
-app.delete('/api/entries', async (req, res, next) => {
+app.delete('/api/entries/:entryId', async (req, res, next) => {
   try {
     const entryId = Number(req.params.entryId);
     if (!Number.isInteger(entryId) || entryId < 1) {
