@@ -13,25 +13,41 @@ if (localData) {
   data = localData;
 }
 
-export function readEntries() {
-  return data.entries;
+export async function readEntries() {
+  const res = await fetch('/api/entries');
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return await res.json();
 }
 
-export function addEntry(entry) {
-  entry.entryId = data.nextEntryId++;
-  data.entries.unshift(entry);
+export async function addEntry(entry) {
+  const req = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(entry),
+  };
+  const res = await fetch('/api/entries', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return await res.json();
 }
 
-export function updateEntry(entry) {
-  const newEntries = data.entries.map((e) =>
-    e.entryId === entry.entryId ? entry : e
-  );
-  data.entries = newEntries;
+export async function updateEntry(entry) {
+  const req = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(entry),
+  };
+  const res = await fetch(`/api/entries/${entry.entryId}`, req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return await res.json();
 }
 
-export function removeEntry(entryId) {
-  const updatedArray = data.entries.filter(
-    (entry) => entry.entryId !== entryId
-  );
-  data.entries = updatedArray;
+export async function removeEntry(entryId) {
+  const req = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(entryId),
+  };
+  const res = await fetch(`/api/entries/${entryId}`, req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return await res.json();
 }
