@@ -28,7 +28,7 @@ export async function updateEntry(entry) {
 
 export async function removeEntry(entryId) {
   const req = {
-    method: 'DELETE',
+    method: 'DELETE'
   };
   const res = await fetch(`/api/entries/${entryId}`, req);
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
